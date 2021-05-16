@@ -7,10 +7,9 @@ const refs = {
 }
 
 class CountdownTimer {
-    constructor({ selector, targetDate, onTick }) {
+    constructor({ selector, targetDate }) {
         this.selector = selector;
         this.targetDate = targetDate;
-        this.onTick = onTick;
 
         this.init();
         this.start();
@@ -18,7 +17,7 @@ class CountdownTimer {
 
     init() {
         const time = this.getTimeComponents(this.targetDate- Date.now());
-        this.onTick(time);
+        this.updateTimer(time);
     }
 
     start() {
@@ -31,7 +30,7 @@ class CountdownTimer {
 
             const time = this.getTimeComponents(endTime);
 
-            this.onTick(time);
+            this.updateTimer(time);
         }, 1000);
     };
 
@@ -47,19 +46,15 @@ class CountdownTimer {
         return { days, hours, mins, secs };
     };
 
+    updateTimer({ days, hours, mins, secs }) {
+        refs.days.textContent = days;
+        refs.hours.textContent = hours;
+        refs.mins.textContent = mins;
+        refs.secs.textContent = secs;
+    };
 }
 
 const timer = new CountdownTimer({
     selector: '#timer-1',
     targetDate: new Date('Jul 17, 2021'),
-    onTick: updateTimer,
 });
-
-function updateTimer({ days, hours, mins, secs }) {
-        refs.days.textContent = days;
-        refs.hours.textContent = hours;
-        refs.mins.textContent = mins;
-        refs.secs.textContent = secs;
-}
-
-// window.addEventListener('onbeforeunload', timer.start.bind(timer));
